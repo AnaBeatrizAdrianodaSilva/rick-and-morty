@@ -78,6 +78,12 @@ a:hover {
   background-color: rgb(60, 62, 68);
   border-radius: 20px;
   margin-bottom: 20px;
+
+  transition: all 1;
+}
+
+.card:hover {
+  width: 43%;
 }
 
 .char {
