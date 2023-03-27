@@ -1,107 +1,102 @@
 import { useEffect, useState } from 'react';
 import './CSS/App.css';
 
-
-const mock = [
-  {
-    "id": 2,
-    "name": "Morty Smith",
-    "status": "Alive",
-    "species": "Human",
-    "type": "",
-    "gender": "Male",
-    "origin": {
-      "name": "unknown",
-      "url": ""
-    },
-    "location": {
-      "name": "Citadel of Ricks",
-      "url": "https://rickandmortyapi.com/api/location/3"
-    },
-    "image": "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-    "episode": [
-      "https://rickandmortyapi.com/api/episode/1",
-      "https://rickandmortyapi.com/api/episode/2",
-      "https://rickandmortyapi.com/api/episode/3",
-      "https://rickandmortyapi.com/api/episode/4",
-      "https://rickandmortyapi.com/api/episode/5",
-      "https://rickandmortyapi.com/api/episode/6",
-      "https://rickandmortyapi.com/api/episode/7",
-      "https://rickandmortyapi.com/api/episode/8",
-      "https://rickandmortyapi.com/api/episode/9",
-      "https://rickandmortyapi.com/api/episode/10",
-      "https://rickandmortyapi.com/api/episode/11",
-      "https://rickandmortyapi.com/api/episode/12",
-      "https://rickandmortyapi.com/api/episode/13",
-      "https://rickandmortyapi.com/api/episode/14",
-      "https://rickandmortyapi.com/api/episode/15",
-      "https://rickandmortyapi.com/api/episode/16",
-      "https://rickandmortyapi.com/api/episode/17",
-      "https://rickandmortyapi.com/api/episode/18",
-      "https://rickandmortyapi.com/api/episode/19",
-      "https://rickandmortyapi.com/api/episode/20",
-      "https://rickandmortyapi.com/api/episode/21",
-      "https://rickandmortyapi.com/api/episode/22",
-      "https://rickandmortyapi.com/api/episode/23",
-      "https://rickandmortyapi.com/api/episode/24",
-      "https://rickandmortyapi.com/api/episode/25",
-      "https://rickandmortyapi.com/api/episode/26",
-      "https://rickandmortyapi.com/api/episode/27",
-      "https://rickandmortyapi.com/api/episode/28",
-      "https://rickandmortyapi.com/api/episode/29",
-      "https://rickandmortyapi.com/api/episode/30",
-      "https://rickandmortyapi.com/api/episode/31",
-      "https://rickandmortyapi.com/api/episode/32",
-      "https://rickandmortyapi.com/api/episode/33",
-      "https://rickandmortyapi.com/api/episode/34",
-      "https://rickandmortyapi.com/api/episode/35",
-      "https://rickandmortyapi.com/api/episode/36",
-      "https://rickandmortyapi.com/api/episode/37",
-      "https://rickandmortyapi.com/api/episode/38",
-      "https://rickandmortyapi.com/api/episode/39",
-      "https://rickandmortyapi.com/api/episode/40",
-      "https://rickandmortyapi.com/api/episode/41",
-      "https://rickandmortyapi.com/api/episode/42",
-      "https://rickandmortyapi.com/api/episode/43",
-      "https://rickandmortyapi.com/api/episode/44",
-      "https://rickandmortyapi.com/api/episode/45",
-      "https://rickandmortyapi.com/api/episode/46",
-      "https://rickandmortyapi.com/api/episode/47",
-      "https://rickandmortyapi.com/api/episode/48",
-      "https://rickandmortyapi.com/api/episode/49",
-      "https://rickandmortyapi.com/api/episode/50",
-      "https://rickandmortyapi.com/api/episode/51"
-    ],
-    "url": "https://rickandmortyapi.com/api/character/2",
-    "created": "2017-11-04T18:50:21.651Z"
-  }
-]
-
 export default function App() {
 
   const [conteudo, setConteudo] = useState(<></>);
 
-  function carregarTodosOsPersonagens() {
-    return mock;
+  function translateStatus(status) {
+    switch (status) {
+      case 'Alive':
+        return 'Vivo'
+      // break
+
+      case 'Dead':
+        return 'Morto'
+
+      case 'unknown':
+        return 'Desconhecido'
+
+      default: 
+        return status
+    }
   }
 
-  function listaPersonagem() {
-    const todosPersonagens = carregarTodosOsPersonagens();
+  function translateGender(gender) {
+    switch (gender) {
+      case 'Male':
+        return 'Homem'
+      // break
 
-    return todosPersonagens.map(personagem => 
+      case 'Female':
+        return 'Mulher'
+
+      case 'unknown':
+        return 'Desconhecido'
+
+      default: 
+        return gender
+    }
+  }
+
+  function translateSpecies(species) {
+    switch (species) {
+      case 'Human':
+        return 'Humano'
+      
+      case 'Alien':
+        return 'Alienígena'
+      
+      case 'Robot':
+        return 'Robô'
+      
+      default:
+        return species
+    }
+  }
+
+  async function carregarTodosOsPersonagens() {
+
+    const retorno = await fetch(
+      "https://rickandmortyapi.com/api/character",
+      { method: "GET" }
+    )
+      .then((response) => response.json())
+      console.log(retorno)
+
+    return retorno.results;
+  }
+
+  async function listaPersonagem() {
+    const todosPersonagens = await carregarTodosOsPersonagens();
+
+    return todosPersonagens.map(personagem =>
       <div className='card char'>
         <img src={personagem.image} alt={personagem.name} />
         <h1>{personagem.name}</h1>
-        <p><strong>Espécie:</strong> {personagem.species}</p>
-        <p><strong>Gênero:</strong> {personagem.gender}</p>
-        <p className='lista-secundaria'>Participações:</p>
-        <p><strong>Status:</strong> {personagem.status}</p>
+        <p><strong>Espécie:</strong> {translateSpecies(personagem.species)}</p>
+        <p><strong>Gênero:</strong> {translateGender(personagem.gender)}</p>
+        <p className='lista-secundaria'>
+          Participações:
+          {
+            personagem.episode.map(ep => (
+              <span key={personagem.name+(ep.split('episose/')[1])}>
+                Ep - {(ep.split('episode/')[1])},
+              </span>
+            ))
+          }
+        </p>
+        <p><strong>Status:</strong> {translateStatus(personagem.status)}</p>
       </div>
     )
   }
 
   useEffect(() => {
-    setConteudo(listaPersonagem());
+    async function carregar() {
+      setConteudo(await listaPersonagem());
+    }
+
+    carregar();
   }, [])
 
   return (
@@ -109,6 +104,10 @@ export default function App() {
       <header className="cabecalho">
         <h1>Rick and Morty API</h1>
       </header>
+
+      <div className='filtros'>
+
+      </div>
 
       <div className="lista-principal">
         {conteudo}

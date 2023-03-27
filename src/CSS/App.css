@@ -79,11 +79,6 @@ a:hover {
   border-radius: 20px;
   margin-bottom: 20px;
 
-  transition: all 1;
-}
-
-.card:hover {
-  width: 43%;
 }
 
 .char {
