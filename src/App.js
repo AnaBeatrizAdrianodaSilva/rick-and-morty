@@ -35,6 +35,9 @@ export default function App() {
       case 'unknown':
         return 'Desconhecido'
 
+      case 'Genderless':
+        return 'Sem Gênero'
+
       default:
         return gender
     }
@@ -50,6 +53,9 @@ export default function App() {
 
       case 'Robot':
         return 'Robô'
+
+      case 'unknown':
+        return 'Desconhecido'
 
       default:
         return species
@@ -126,7 +132,7 @@ export default function App() {
           <b>Gênero</b>
           <span onClick={() => setBusca("?gender=Male")}>Masculino</span>
           <span onClick={() => setBusca("?gender=Female")}>Feminino</span>
-          <span>Sem Gênero</span>
+          <span onClick={() => setBusca("?gender=less")}>Sem Gênero</span>
           <span onClick={() => setBusca("?gender=unknown")}>Desconhecido</span>
         </div>
       </div>
