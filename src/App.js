@@ -4,6 +4,7 @@ import './CSS/App.css';
 export default function App() {
 
   const [conteudo, setConteudo] = useState(<></>);
+  const [busca, setBusca] = useState("");
 
   function translateStatus(status) {
     switch (status) {
@@ -17,7 +18,7 @@ export default function App() {
       case 'unknown':
         return 'Desconhecido'
 
-      default: 
+      default:
         return status
     }
   }
@@ -34,7 +35,7 @@ export default function App() {
       case 'unknown':
         return 'Desconhecido'
 
-      default: 
+      default:
         return gender
     }
   }
@@ -43,28 +44,35 @@ export default function App() {
     switch (species) {
       case 'Human':
         return 'Humano'
-      
+
       case 'Alien':
         return 'Alienígena'
-      
+
       case 'Robot':
         return 'Robô'
-      
+
       default:
         return species
     }
   }
 
   async function carregarTodosOsPersonagens() {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    }
 
-    const retorno = await fetch(
-      "https://rickandmortyapi.com/api/character",
-      { method: "GET" }
+    const result = await fetch(
+      "https://rickandmortyapi.com/api/character" + busca,
+      requestOptions
     )
-      .then((response) => response.json())
-      console.log(retorno)
+      .then(response => response.text())
+      .then(result => { return result })
+      .catch(error => console.log('error', error))
 
-    return retorno.results;
+    const char = JSON.parse(result)
+
+    return char.results;
   }
 
   async function listaPersonagem() {
@@ -80,7 +88,7 @@ export default function App() {
           Participações:
           {
             personagem.episode.map(ep => (
-              <span key={personagem.name+(ep.split('episose/')[1])}>
+              <span key={personagem.name + (ep.split('episose/')[1])}>
                 Ep - {(ep.split('episode/')[1])},
               </span>
             ))
@@ -97,7 +105,7 @@ export default function App() {
     }
 
     carregar();
-  }, [])
+  }, [busca])
 
   return (
     <div className="App">
@@ -106,7 +114,21 @@ export default function App() {
       </header>
 
       <div className='filtros'>
+        <span className='filtros-titulos'>Filtros</span>
+        <div className='filtro status'>
+          <b>Status</b>
+          <span onClick={() => setBusca("?status=live")}>Vivo</span>
+          <span onClick={() => setBusca("?status=dead")}>Morto</span>
+          <span onClick={() => setBusca("?status=unknown")}>Desconhecido</span>
+        </div>
 
+        <div className='filtro genero'>
+          <b>Gênero</b>
+          <span onClick={() => setBusca("?gender=Male")}>Masculino</span>
+          <span onClick={() => setBusca("?gender=Female")}>Feminino</span>
+          <span>Sem Gênero</span>
+          <span onClick={() => setBusca("?gender=unknown")}>Desconhecido</span>
+        </div>
       </div>
 
       <div className="lista-principal">
